@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd     
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+        
+    <!-- 自动扫描该包，SpringMVC会将包下用了@controller注解的类注册为Spring的controller -->
+   <context:component-scan base-package="com.Controller"/>
+
+  <!-- 设置默认配置方案 -->
+<mvc:annotation-driven/>
+<!-- 使用默认的Servlet来响应静态文件 -->
+<mvc:default-servlet-handler/>
+
+
+<!-- 视图解析器  -->
+     <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
+        <!-- 前缀 -->
+        <property name="prefix">
+            <value>/WEB-INF/jsp/</value>
+        </property>
+        <!-- 后缀 -->
+        <property name="suffix">
+            <value>.jsp</value>
+        </property>
+    </bean>
+    
+    <mvc:interceptors>
+       <mvc:interceptor>
+            <mvc:mapping path="/*"/>
+            <mvc:exclude-mapping path="/index"/>
+            <mvc:exclude-mapping path="/show"/>
+            <bean class="com.Util.Interceptor"/>
+       </mvc:interceptor>
+</mvc:interceptors>
+   
+   
+    <!-- 配置上传文件的组件 id的值必须为“multipartResolver” -->
+    <!-- class spring-web  org.springframework.web.multipart.commons -->
+   <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+            <!-- 设置默认的编码格式 -->
+            <property name="defaultEncoding" value="utf-8"></property>
+    </bean>
+
+</beans>
